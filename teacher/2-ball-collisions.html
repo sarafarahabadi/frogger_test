@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <style>
+        body {margin: 0}
+    </style>
+</head>
+<body>
+    <canvas id="target"></canvas>
+    <script>
+        const canvas = document.getElementById("target");
+        const context = canvas.getContext("2d");
+
+        canvas.width = 672;
+        canvas.height = 744;
+//drawing a line:
+/*      context.moveTo(100, 100);
+        context.lineTo(200, 200);
+        context.stroke(); */
+
+
+/*         let speedY = 5;
+        let ballX = 300;
+        let ballY = 10;
+
+        let speedY2 = 5;
+        let ball2X = 400;
+        let ball2Y = 10; */
+
+        class ball {
+            constructor(startX, startY,speedX, speedY) {
+                this.x = startX;
+                this.y = startY;
+                this.speedY = speedY;
+                this.speedX = speedX;
+                this.radius = Math.random() * 50;
+                this.color = {
+                    red: Math.random() * 255,
+                    green: Math.random() * 255,
+                    blue: Math.random() * 255
+                }
+
+            }
+
+            update() {
+                if((this.y >= canvas.height) || (this.y <= 0)) {
+                    this.speedY = -this.speedY;
+                }
+                if(this.x >= canvas.width || (this.x <= 0)) {
+                    this.speedX = -this.speedX;
+                }
+                this.y = this.y + this.speedY;
+                this.x = this.x + this.speedX;
+            }
+
+            draw() {
+                context.beginPath();
+                context.arc(this.x, this.y, this.radius, 30, 0, 2 * Math.PI);
+                //selecting one color for all the objects:
+                    //context.fillStyle = 'red';
+                //selecting only one combined color between red, green and blue:
+                    //context.fillStyle = 'rgb(125,0,200)';
+                //selecting colors randomly, based on combination of red, green and blue:
+                context.fillStyle = `rgb(${this.color.red}, ${this.color.green}, ${this.color.blue})`;
+                context.fill();
+            }
+        }
+
+        class Player {
+            constructor(x, y, movementSpeedX, movementSpeedY) {
+                this.x = x;
+                this.y = y;
+                this.movementSpeedX = movementSpeedX;
+                this.movementSpeedY = movementSpeedY;
+            }
+
+            moveUp() {
+//when the key up arrow is pressed,
+//then decrease y coordinate by the amount of movementSpeedY values
+                this.y -= this.movementSpeedY;
+            }
+            moveDown() {
+                this.y += this.movementSpeedY;
+            }
+            moveLeft() {
+                this.x -= this.movementSpeedX;
+            }
+            moveRight() {
+                this.x += this.movementSpeedX;
+            }
+
+            update() {
+
+            }
+
+            draw() {
+                context.beginPath();
+                context.rect(this.x, this.y, 50, 50);
+                context.fillStyle = 'green';
+                context.fill();
+                context.lineWidth = 1;
+                context.strokeStyle = 'green';
+                context.stroke();
+            }
+        }
+        const player = new Player(288, 300, 48, 48);
+
+        const ballStorage = [];
+        for(let i = 0; i < 5; i++) {
+        //below code is the same as codes underneath. 
+        //second version is shorter and more efficient.
+/*            
+           let randomXDirection = 1;
+           if(Math.random() > 0.5) {
+               randomXDirection = -1;
+           } */
+           
+            ballStorage.push(
+                new ball(Math.random() * canvas.width, //x cood
+                         Math.random() * canvas.height, //y cood
+                         (Math.random() * 10) * (Math.random() > 0.5 ? 1 : -1), // x speed
+                         (Math.random() * 10)  * (Math.random() > 0.5 ? 1 : -1)) // y speed
+                );
+        }
+
+        function updateScreen() {
+            //clear the canvas
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            for(let i = 0; i < ballStorage.length; i++) {
+                ballStorage[i].update();
+                ballStorage[i].draw();
+
+            }
+            player.update();
+            player.draw();
+
+            window.requestAnimationFrame(updateScreen);
+        }
+        window.requestAnimationFrame(updateScreen);
+
+        window.addEventListener('keydown', function(event) {
+
+            switch(event.keyCode) {
+                case 37:
+                    console.log('LEFT!');
+                    player.moveLeft();
+                    break;
+                case 38:
+                    console.log('UP!');
+                    player.moveUp();
+                    break;
+                case 39:
+                    console.log('RIGHT!');
+                    player.moveRight();
+                    break;
+                case 40:
+                    console.log('DOWN!')
+                    player.moveDown();
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin-top: 0;
+            text-align: center;
+        }
+        .canvas {
+            padding-top: 40px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas class="canvas" id="target" width="672" height="744"></canvas>
+    <script>
+        const canvas = document.getElementById("target");
+        const context = canvas.getContext("2d");
+
+        
+        
+        class ball {
+            constructor(startX, startY, speed) {
+                this.x = startX;
+                this.y = startY;
+                this.speed = speed;
+            }
+
+            update() {
+                if(this.x >= canvas.width)  {
+                    this.x = 0;
+                }
+                this.x = this.x + this.speed;
+            }
+
+            draw() {
+                context.beginPath();
+                context.arc(this.x, this.y, 30, 0, 2 * Math.PI);
+                context.fillStyle = 'red';
+                context.fill();
+            }
+        }
+
+        class car {
+            constructor(startX, startY, speed) {
+                this.x = startX;
+                this.y = startY;
+                this.speed = speed;
+            }
+
+            update() {
+                if(this.x <= 0) {
+                    this.x = canvas.width;
+                }
+                this.x = this.x - this.speed;
+            }
+
+
+            draw() {
+                context.beginPath();
+                context.arc(this.x, this.y, 30, 0, 2 * Math.PI);
+                context.fillStyle = 'blue';
+                context.fill();
+            }
+        }
+
+        class Player {
+            constructor(x, y, movementSpeedX, movementSpeedY) {
+                this.x = x;
+                this.y = y;
+                this.movementSpeedX = movementSpeedX;
+                this.movementSpeedY = movementSpeedY;
+            }
+
+            moveUp() {
+                this.y -= this.movementSpeedY;
+            }
+            moveDown() {
+                this.y += this.movementSpeedY;
+            }
+            moveLeft() {
+                this.x -= this.movementSpeedX;
+            }
+            moveRight() {
+                this.x += this.movementSpeedX;
+            }
+
+            update() {
+// write the Collision Here
+//this.x <= player.x && player.x <= this.x + width
+            }
+
+            draw() {
+                context.beginPath();
+                context.rect(this.x, this.y, 50, 50);
+                context.fillStyle = 'green';
+                context.fill();
+                context.lineWidth = 1;
+                context.strokeStyle = 'green';
+                context.stroke();
+            }
+        }
+        const player = new Player(310, 670, 30, 30);
+
+        const ballStorage = [];
+        for(let i = 0; i < 3; i++) {
+            ballStorage.push(new ball(1+ i*150, 100, 0.8));
+            ballStorage.push(new ball(1+ i*150, 220, 2));
+
+        }
+        const carStorage = [];
+        for(let i = 0; i < 3; i++) {
+            carStorage.push(new car(1+ i*300, 160, 0.8));
+            carStorage.push(new car(1+ i*300, 280, 2));
+        }
+
+        function updateScreen() {
+            //clear the canvas
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            for(let i = 0; i < ballStorage.length; i++) {
+                ballStorage[i].update();
+                ballStorage[i].draw();
+            }
+            for(let i = 0; i < carStorage.length; i++) {
+                carStorage[i].update();
+                carStorage[i].draw();
+            }
+            player.update();
+            player.draw();
+
+            window.requestAnimationFrame(updateScreen);
+        }
+        window.requestAnimationFrame(updateScreen);
+
+        window.addEventListener('keydown', function(event) {
+
+            switch(event.keyCode) {
+                case 37:
+                    console.log('LEFT!');
+                    player.moveLeft();
+                    break;
+                case 38:
+                    console.log('UP!');
+                    player.moveUp();
+                    break;
+                case 39:
+                    console.log('RIGHT!');
+                    player.moveRight();
+                    break;
+                case 40:
+                    console.log('DOWN!')
+                    player.moveDown();
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>
