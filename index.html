@@ -11,20 +11,21 @@
             text-align: center;
         }
         .canvas {
-            padding-top: 40px;
-            border: 1px solid black;
+            padding-top: 60px;
         }
     </style>
 </head>
 <body>
-    <canvas class="canvas" id="target" width="672" height="744"></canvas>
+    <canvas class="canvas" id="target"></canvas>
     <script>
         const canvas = document.getElementById("target");
         const context = canvas.getContext("2d");
 
+        canvas.width = 672;
+        canvas.height = 744;
+        canvas.style= 610; 
         
-        
-        class ball {
+        class car {
             constructor(startX, startY, speed) {
                 this.x = startX;
                 this.y = startY;
@@ -36,38 +37,19 @@
                     this.x = 0;
                 }
                 this.x = this.x + this.speed;
+
+
             }
 
             draw() {
+ 
+                context.drawImage(backgroundImage, 0, 0);
                 context.beginPath();
                 context.arc(this.x, this.y, 30, 0, 2 * Math.PI);
                 context.fillStyle = 'red';
                 context.fill();
             }
-        }
-
-        class car {
-            constructor(startX, startY, speed) {
-                this.x = startX;
-                this.y = startY;
-                this.speed = speed;
-            }
-
-            update() {
-                if(this.x <= 0) {
-                    this.x = canvas.width;
-                }
-                this.x = this.x - this.speed;
-            }
-
-
-            draw() {
-                context.beginPath();
-                context.arc(this.x, this.y, 30, 0, 2 * Math.PI);
-                context.fillStyle = 'blue';
-                context.fill();
-            }
-        }
+        } 
 
         class Player {
             constructor(x, y, movementSpeedX, movementSpeedY) {
@@ -89,10 +71,13 @@
             moveRight() {
                 this.x += this.movementSpeedX;
             }
-
             update() {
-// write the Collision Here
-//this.x <= player.x && player.x <= this.x + width
+/*                 if(((this.x + this.width) > player.x) &&
+                    (this.x < (player.x + player.width)) &&
+                    ((this.y + this.height) > player.y) &&
+                    (this.y < (player.y + player.height))) {
+                    console.log('Hit');
+                } */
             }
 
             draw() {
@@ -105,60 +90,57 @@
                 context.stroke();
             }
         }
+
+
         const player = new Player(310, 670, 30, 30);
 
-        const ballStorage = [];
-        for(let i = 0; i < 3; i++) {
-            ballStorage.push(new ball(1+ i*150, 100, 0.8));
-            ballStorage.push(new ball(1+ i*150, 220, 2));
-
-        }
         const carStorage = [];
         for(let i = 0; i < 3; i++) {
-            carStorage.push(new car(1+ i*300, 160, 0.8));
-            carStorage.push(new car(1+ i*300, 280, 2));
+            carStorage.push(new car(1+ i*150, 100, 2));
+
         }
 
-        function updateScreen() {
+
+      function updateScreen() {
             //clear the canvas
             context.clearRect(0, 0, canvas.width, canvas.height);
 
-            for(let i = 0; i < ballStorage.length; i++) {
-                ballStorage[i].update();
-                ballStorage[i].draw();
-            }
             for(let i = 0; i < carStorage.length; i++) {
                 carStorage[i].update();
                 carStorage[i].draw();
             }
+
             player.update();
             player.draw();
 
             window.requestAnimationFrame(updateScreen);
         }
-        window.requestAnimationFrame(updateScreen);
+        window.requestAnimationFrame(updateScreen); 
+
+        const backgroundImage = new Image();
+        backgroundImage.onload = function() {
+            window.requestAnimationFrame(updateScreen);
+        }
+        backgroundImage.src = "froggerBackground.png";
 
         window.addEventListener('keydown', function(event) {
 
             switch(event.keyCode) {
                 case 37:
-                    console.log('LEFT!');
                     player.moveLeft();
                     break;
                 case 38:
-                    console.log('UP!');
                     player.moveUp();
                     break;
                 case 39:
-                    console.log('RIGHT!');
                     player.moveRight();
                     break;
                 case 40:
-                    console.log('DOWN!')
                     player.moveDown();
                     break;
             }
         });
+
     </script>
 </body>
 </html>
