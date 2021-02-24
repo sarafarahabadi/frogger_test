@@ -23,10 +23,14 @@
 
         canvas.width = 672;
         canvas.height = 744;
-        canvas.style= 610; 
-        
+
+        // object's images
+        const frogStandImage = new Image();
+        frogStandImage.src = "images/frog_Stand.png";
+
+
         class car {
-            constructor(startX, startY, speed) {
+            constructor(startX, startY, speed, image) {
                 this.x = startX;
                 this.y = startY;
                 this.speed = speed;
@@ -37,8 +41,6 @@
                     this.x = 0;
                 }
                 this.x = this.x + this.speed;
-
-
             }
 
             draw() {
@@ -81,18 +83,12 @@
             }
 
             draw() {
-                context.beginPath();
-                context.rect(this.x, this.y, 50, 50);
-                context.fillStyle = 'green';
-                context.fill();
-                context.lineWidth = 1;
-                context.strokeStyle = 'green';
-                context.stroke();
+                context.drawImage(frogStandImage, this.x, this.y);
             }
         }
 
 
-        const player = new Player(310, 670, 30, 30);
+        const player = new Player(310, 590, 48, 48);
 
         const carStorage = [];
         for(let i = 0; i < 3; i++) {
@@ -117,12 +113,16 @@
         }
         window.requestAnimationFrame(updateScreen); 
 
+        // background image
         const backgroundImage = new Image();
         backgroundImage.onload = function() {
             window.requestAnimationFrame(updateScreen);
         }
-        backgroundImage.src = "froggerBackground.png";
+        backgroundImage.src = "images/froggerBackground.png";
 
+        frogStandImage.onload = function() {
+            window.requestAnimationFrame(updateScreen);
+        }
         window.addEventListener('keydown', function(event) {
 
             switch(event.keyCode) {
