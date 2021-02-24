@@ -50,8 +50,11 @@
         const turtleImage = new Image();
         turtleImage.src = "images/turtle.png";
 
-        const logImage = new Image();
-        logImage.src = "images/log1.png";
+        const logSmallImage = new Image();
+        logSmallImage.src = "images/log1.png";
+
+        const logBigImage = new Image();
+        logBigImage.src = "images/log2.png";
 
 // class: car, turtle, log, player
         class car {
@@ -102,7 +105,7 @@
             }
             update() {
                 if(this.x >= canvas.width + 50) {
-                    this.x = -100;
+                    this.x = -150;
                 }
                 this.x = this.x + this.speed; 
             }
@@ -175,11 +178,22 @@
             turtleStorage.push(new turtle(450+ i*50 , 310, -1, turtleImage));
             turtleStorage.push(new turtle(100+ i*50 , 310, -1, turtleImage));
         }
+        for(let i = 0; i < 2; i++) {
+            turtleStorage.push(new turtle(550+ i*50 , 145, -1, turtleImage));
+            turtleStorage.push(new turtle(80+ i*50 , 145, -1, turtleImage));
+            turtleStorage.push(new turtle(300+ i*50 , 145, -1, turtleImage));
+        }
 
         //log
         const logStorage = [];
         for(let i = 0; i < 3; i++) {
-            logStorage.push(new log(200+ i*300 , 255, 1, logImage));
+            logStorage.push(new log(200+ i*300 , 255, 1, logSmallImage));
+        }
+        for(let i = 0; i < 3; i++) {
+            logStorage.push(new log(100+ i*300 , 200, 1.6, logBigImage));
+        }
+        for(let i = 0; i < 3; i++) {
+            logStorage.push(new log(100+ i*300 , 90, 1.3, logBigImage));
         }
           
 //updateScreen: car, turtle, log, player
