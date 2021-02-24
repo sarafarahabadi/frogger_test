@@ -47,6 +47,13 @@
         const car5Image = new Image();
         car5Image.src = "images/car5.png";
 
+        const turtleImage = new Image();
+        turtleImage.src = "images/turtle.png";
+
+        const logImage = new Image();
+        logImage.src = "images/log1.png";
+
+// class: car, turtle, log, player
         class car {
             constructor(startX, startY, speed, image) {
                 this.x = startX;
@@ -54,21 +61,53 @@
                 this.speed = speed;
                 this.image = image;
             }
-
             update() {
-                if(this.x <= -50)   {
+                if(this.x <= -100)   {
                     this.x = canvas.width;
                 } 
                 this.x = this.x + this.speed;
                 if(this.x >= canvas.width + 50) {
                     this.x = -30;
                 }
-
             }
-
             draw() {
                 context.drawImage(this.image, this.x, this.y);
+            }
+        } 
 
+        class turtle {
+            constructor(startX, startY, speed, image) {
+                this.x = startX;
+                this.y = startY;
+                this.speed = speed;
+                this.image = image;
+            }
+            update() {
+                if(this.x <= -50)   {
+                    this.x = canvas.width;
+                } 
+                this.x = this.x + this.speed;
+            }
+            draw() {
+                context.drawImage(this.image, this.x, this.y);
+            }
+        } 
+
+        class log {
+            constructor(startX, startY, speed, image) {
+                this.x = startX;
+                this.y = startY;
+                this.speed = speed;
+                this.image = image;
+            }
+            update() {
+                if(this.x >= canvas.width + 50) {
+                    this.x = -100;
+                }
+                this.x = this.x + this.speed; 
+            }
+            draw() {
+                context.drawImage(this.image, this.x, this.y);
             }
         } 
 
@@ -79,7 +118,6 @@
                 this.movementSpeedX = movementSpeedX;
                 this.movementSpeedY = movementSpeedY;
             }
-
             moveUp() {
                 this.y -= this.movementSpeedY;
             }
@@ -100,15 +138,16 @@
                     console.log('Hit');
                 } */
             }
-
             draw() {
                 context.drawImage(frogStandImage, this.x, this.y);
             }
         }
 
-
+//const: all subjects
+        //player
         const player = new Player(310, 700, 50, 56);
 
+        //car
         const carStorage = [];
         for(let i = 0; i < 2; i++) {
             carStorage.push(new car(450+ i*700 , 640, -1, car1Image));
@@ -128,10 +167,22 @@
         }
         for(let i = 0; i < 3; i++) {
             carStorage.push(new car(150+ i*250 , 420, -1.4, car5Image));
-
         }
 
+        //turtle
+        const turtleStorage = [];
+        for(let i = 0; i < 3; i++) {
+            turtleStorage.push(new turtle(450+ i*50 , 310, -1, turtleImage));
+            turtleStorage.push(new turtle(100+ i*50 , 310, -1, turtleImage));
+        }
+
+        //log
+        const logStorage = [];
+        for(let i = 0; i < 3; i++) {
+            logStorage.push(new log(200+ i*300 , 255, 1, logImage));
+        }
           
+//updateScreen: car, turtle, log, player
       function updateScreen() {
             //clear the canvas
             context.clearRect(0, 0, canvas.width, canvas.height);
@@ -141,6 +192,14 @@
                 carStorage[i].update();
                 carStorage[i].draw();
             }
+            for(let i = 0; i < turtleStorage.length; i++) {
+                turtleStorage[i].update();
+                turtleStorage[i].draw();
+            }
+            for(let i = 0; i < logStorage.length; i++) {
+                logStorage[i].update();
+                logStorage[i].draw();
+            }
 
             player.update();
             player.draw();
@@ -149,9 +208,7 @@
         }
         window.requestAnimationFrame(updateScreen); 
 
-
-
-
+// frog movements: up, down, left, right
         window.addEventListener('keydown', function(event) {
 
             switch(event.keyCode) {
