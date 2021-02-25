@@ -57,10 +57,13 @@
         logBigImage.src = "images/log2.png";
 
 // class: car, turtle, log, player
+        let countLives = 5;
         class car {
-            constructor(startX, startY, speedX, image){
+            constructor(startX, startY, width, height, speedX, image){
                 this.x = startX;
                 this.y = startY;
+                this.width = width;
+                this.height = height;
                 this.speedX = speedX;
                 this.image = image;
             }
@@ -73,15 +76,33 @@
                     this.x = -30;
                 }
             }
+            carCollision() {
+                if(((this.x + this.width) > player.x) &&
+                    (this.x < (player.x + player.width)) &&
+                    ((this.y + this.height) > player.y) &&
+                    (this.y < (player.y + player.height))) {
+                    if(countLives >  0) {
+                        player.x = 310;
+                        player.y = 700; 
+                        countLives -= 1;  
+                        console.log("You have " + countLives + " remaining!");            
+                    } else {
+                        alert('No more lives! Thanks for playing!')
+                        countLives = 5;
+                    }
+                }
+            }
             draw() {
                 context.drawImage(this.image, this.x, this.y);
             }
         } 
 
         class turtle {
-            constructor(startX, startY, speedX, image){
+            constructor(startX, startY, width, height, speedX, image){
                 this.x = startX;
                 this.y = startY;
+                this.width = width;
+                this.height = height;
                 this.speedX = speedX;
                 this.image = image;
             }
@@ -97,9 +118,11 @@
         } 
 
         class log {
-            constructor(startX, startY, speedX, image){
+            constructor(startX, startY, width, height, speedX, image){
                 this.x = startX;
                 this.y = startY;
+                this.width = width;
+                this.height = height;
                 this.speedX = speedX;
                 this.image = image;
             }
@@ -115,9 +138,11 @@
         } 
 
         class Player {
-            constructor(x, y, speedX, speedY) {
-                this.x = x;
-                this.y = y;
+            constructor(startX, startY, width, height, speedX, speedY) {
+                this.x = startX;
+                this.y = startY;
+                this.width = width;
+                this.height = height;
                 this.speedX = speedX;
                 this.speedY = speedY;
             }
@@ -134,10 +159,6 @@
                 this.x += this.speedX;
             }
             update() {
-/*                 if(((this.x + this.width) > player.x) && (this.x < (player.x + player.width)) &&  //x-axis
-                    ((this.y + this.height) > player.y) && (this.y < (player.y + player.height))) {  //y-axis
-                    console.log('Hit');
-                } */
             }
             draw() {
                 context.drawImage(frogStandImage, this.x, this.y);
@@ -146,52 +167,52 @@
 
 //const: all subjects
         //player
-        const player = new Player(310, 700, 50, 56);
+        const player = new Player(310, 700, 47, 46, 50, 56);
 
         //car
         const carStorage = [];
         for(let i = 0; i < 2; i++) {
-            carStorage.push(new car(450+ i*700 , 640, -1, car1Image));
+            carStorage.push(new car(450+ i*700 , 640, 48, 48, -1, car1Image));
 
         }
         for(let i = 0; i < 2; i++) {
-            carStorage.push(new car(250+ i*300 , 585, 1, car2Image));
+            carStorage.push(new car(250+ i*300 , 585, 47, 46, 1, car2Image));
 
         }
         for(let i = 0; i < 2; i++) {
-            carStorage.push(new car(50+ i*400 , 530, -1.2, car3Image));
+            carStorage.push(new car(50+ i*400 , 530, 47, 45, -1.2, car3Image));
 
         }
         for(let i = 0; i < 2; i++) {
-            carStorage.push(new car(500+ i*600 , 475, 1.3, car4Image));
+            carStorage.push(new car(500+ i*600 , 475, 47, 47, 1.3, car4Image));
 
         }
         for(let i = 0; i < 3; i++) {
-            carStorage.push(new car(150+ i*250 , 420, -1.4, car5Image));
+            carStorage.push(new car(150+ i*250 , 420, 96, 48, -1.4, car5Image));
         }
 
         //turtle
         const turtleStorage = [];
         for(let i = 0; i < 3; i++) {
-            turtleStorage.push(new turtle(450+ i*50 , 310, -1, turtleImage));
-            turtleStorage.push(new turtle(100+ i*50 , 310, -1, turtleImage));
+            turtleStorage.push(new turtle(450+ i*50 , 310, 48, 36, -1, turtleImage));
+            turtleStorage.push(new turtle(100+ i*50 , 310, 48, 36, -1, turtleImage));
         }
         for(let i = 0; i < 2; i++) {
-            turtleStorage.push(new turtle(550+ i*50 , 145, -1, turtleImage));
-            turtleStorage.push(new turtle(80+ i*50 , 145, -1, turtleImage));
-            turtleStorage.push(new turtle(300+ i*50 , 145, -1, turtleImage));
+            turtleStorage.push(new turtle(550+ i*50 , 145, 48, 36, -1, turtleImage));
+            turtleStorage.push(new turtle(80+ i*50 , 145, 48, 36, -1, turtleImage));
+            turtleStorage.push(new turtle(300+ i*50 , 145, 48, 36, -1, turtleImage));
         }
 
         //log
         const logStorage = [];
         for(let i = 0; i < 3; i++) {
-            logStorage.push(new log(200+ i*300 , 255, 1, logSmallImage));
+            logStorage.push(new log(200+ i*300 , 255, 101, 36, 1, logSmallImage));
         }
         for(let i = 0; i < 3; i++) {
-            logStorage.push(new log(100+ i*300 , 200, 1.6, logBigImage));
+            logStorage.push(new log(100+ i*300 , 200, 151, 36, 1.6, logBigImage));
         }
         for(let i = 0; i < 3; i++) {
-            logStorage.push(new log(100+ i*300 , 90, 1.3, logBigImage));
+            logStorage.push(new log(100+ i*300 , 90, 151, 36, 1.3, logBigImage));
         }
           
 //updateScreen: car, turtle, log, player
@@ -203,6 +224,7 @@
             for(let i = 0; i < carStorage.length; i++) {
                 carStorage[i].update();
                 carStorage[i].draw();
+                carStorage[i].carCollision();
             }
             for(let i = 0; i < turtleStorage.length; i++) {
                 turtleStorage[i].update();
