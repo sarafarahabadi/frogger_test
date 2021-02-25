@@ -50,11 +50,14 @@
         const turtleImage = new Image();
         turtleImage.src = "images/turtle.png";
 
-        const logSmallImage = new Image();
-        logSmallImage.src = "images/log1.png";
+        const log1Image = new Image();
+        log1Image.src = "images/log1.png";
 
-        const logBigImage = new Image();
-        logBigImage.src = "images/log2.png";
+        const log2Image = new Image();
+        log2Image.src = "images/log2.png";
+
+        const log3Image = new Image();
+        log3Image.src = "images/log3.png";
 
 // class: car, turtle, log, player
         let countLives = 5;
@@ -85,6 +88,7 @@
                         player.x = 310;
                         player.y = 700; 
                         countLives -= 1;  
+// can put a button counter to reduce lives after death!
                         console.log("You have " + countLives + " remaining!");            
                     } else {
                         alert('No more lives! Thanks for playing!')
@@ -112,6 +116,15 @@
                 } 
                 this.x = this.x + this.speedX;
             }
+            standOnTurtles() {
+                if(((this.x + this.width) > player.x) &&
+                    (this.x < (player.x + player.width)) &&
+                    ((this.y + this.height) > player.y) &&
+                    (this.y < (player.y + player.height))) {
+                        console.log("you are on the turtles!");
+                        player.x = this.x + this.speedX;
+                } 
+            }
             draw() {
                 context.drawImage(this.image, this.x, this.y);
             }
@@ -131,6 +144,15 @@
                     this.x = -150;
                 }
                 this.x = this.x + this.speedX; 
+            }
+            standOnLog() {
+                if(((this.x + this.width) > player.x) &&
+                    (this.x < (player.x + player.width)) &&
+                    ((this.y + this.height) > player.y) &&
+                    (this.y < (player.y + player.height))) {
+                        console.log("you are on the logs!");
+                        player.x = this.x + this.speedX;
+                } 
             }
             draw() {
                 context.drawImage(this.image, this.x, this.y);
@@ -205,14 +227,19 @@
 
         //log
         const logStorage = [];
-        for(let i = 0; i < 3; i++) {
-            logStorage.push(new log(200+ i*300 , 255, 101, 36, 1, logSmallImage));
+        for(let i = 0; i < 2; i++) {
+            logStorage.push(new log(152+ i*300 , 255, 48, 33, 0.8, log1Image));
+            logStorage.push(new log(200+ i*300 , 255, 48, 36, 0.8, log3Image));
         }
         for(let i = 0; i < 3; i++) {
-            logStorage.push(new log(100+ i*300 , 200, 151, 36, 1.6, logBigImage));
+            logStorage.push(new log(52+ i*250 , 200, 48, 33, 1, log1Image));
+            logStorage.push(new log(100+ i*250 , 200, 48, 33, 1, log2Image));
+            logStorage.push(new log(148+ i*250 , 200, 48, 36, 1, log3Image)); 
         }
         for(let i = 0; i < 3; i++) {
-            logStorage.push(new log(100+ i*300 , 90, 151, 36, 1.3, logBigImage));
+            logStorage.push(new log(100+ i*250 , 90, 48, 33, 1, log1Image));
+            logStorage.push(new log(148+ i*250 , 90, 48, 33, 1, log2Image));
+            logStorage.push(new log(196+ i*250 , 90, 48, 36, 1, log3Image)); 
         }
           
 //updateScreen: car, turtle, log, player
@@ -229,10 +256,12 @@
             for(let i = 0; i < turtleStorage.length; i++) {
                 turtleStorage[i].update();
                 turtleStorage[i].draw();
+                turtleStorage[i].standOnTurtles();
             }
             for(let i = 0; i < logStorage.length; i++) {
                 logStorage[i].update();
                 logStorage[i].draw();
+                logStorage[i].standOnLog();
             }
 
             player.update();
