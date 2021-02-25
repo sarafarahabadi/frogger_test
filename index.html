@@ -56,20 +56,14 @@
         const logBigImage = new Image();
         logBigImage.src = "images/log2.png";
 
-// class: "ALL OBJECTS" and it's extends: car, turtle, log
-            //player class at the end.
-        
-        
-        class AllObjects {
+// class: car, turtle, log, player
+        class car {
             constructor(startX, startY, speedX, image){
                 this.x = startX;
                 this.y = startY;
                 this.speedX = speedX;
                 this.image = image;
             }
-        } 
-
-        class car extends AllObjects {
             update() {
                 if(this.x <= -100)   {
                     this.x = canvas.width;
@@ -84,7 +78,13 @@
             }
         } 
 
-        class turtle extends AllObjects{
+        class turtle {
+            constructor(startX, startY, speedX, image){
+                this.x = startX;
+                this.y = startY;
+                this.speedX = speedX;
+                this.image = image;
+            }
             update() {
                 if(this.x <= -50)   {
                     this.x = canvas.width;
@@ -96,7 +96,13 @@
             }
         } 
 
-        class log extends AllObjects{
+        class log {
+            constructor(startX, startY, speedX, image){
+                this.x = startX;
+                this.y = startY;
+                this.speedX = speedX;
+                this.image = image;
+            }
             update() {
                 if(this.x >= canvas.width + 50) {
                     this.x = -150;
