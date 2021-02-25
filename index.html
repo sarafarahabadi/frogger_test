@@ -56,19 +56,25 @@
         const logBigImage = new Image();
         logBigImage.src = "images/log2.png";
 
-// class: car, turtle, log, player
-        class car {
-            constructor(startX, startY, speed, image) {
+// class: "ALL OBJECTS" and it's extends: car, turtle, log
+            //player class at the end.
+        
+        
+        class AllObjects {
+            constructor(startX, startY, speedX, image){
                 this.x = startX;
                 this.y = startY;
-                this.speed = speed;
+                this.speedX = speedX;
                 this.image = image;
             }
+        } 
+
+        class car extends AllObjects {
             update() {
                 if(this.x <= -100)   {
                     this.x = canvas.width;
                 } 
-                this.x = this.x + this.speed;
+                this.x = this.x + this.speedX;
                 if(this.x >= canvas.width + 50) {
                     this.x = -30;
                 }
@@ -78,36 +84,24 @@
             }
         } 
 
-        class turtle {
-            constructor(startX, startY, speed, image) {
-                this.x = startX;
-                this.y = startY;
-                this.speed = speed;
-                this.image = image;
-            }
+        class turtle extends AllObjects{
             update() {
                 if(this.x <= -50)   {
                     this.x = canvas.width;
                 } 
-                this.x = this.x + this.speed;
+                this.x = this.x + this.speedX;
             }
             draw() {
                 context.drawImage(this.image, this.x, this.y);
             }
         } 
 
-        class log {
-            constructor(startX, startY, speed, image) {
-                this.x = startX;
-                this.y = startY;
-                this.speed = speed;
-                this.image = image;
-            }
+        class log extends AllObjects{
             update() {
                 if(this.x >= canvas.width + 50) {
                     this.x = -150;
                 }
-                this.x = this.x + this.speed; 
+                this.x = this.x + this.speedX; 
             }
             draw() {
                 context.drawImage(this.image, this.x, this.y);
@@ -115,29 +109,27 @@
         } 
 
         class Player {
-            constructor(x, y, movementSpeedX, movementSpeedY) {
+            constructor(x, y, speedX, speedY) {
                 this.x = x;
                 this.y = y;
-                this.movementSpeedX = movementSpeedX;
-                this.movementSpeedY = movementSpeedY;
+                this.speedX = speedX;
+                this.speedY = speedY;
             }
             moveUp() {
-                this.y -= this.movementSpeedY;
+                this.y -= this.speedY;
             }
             moveDown() {
-                this.y += this.movementSpeedY;
+                this.y += this.speedY;
             }
             moveLeft() {
-                this.x -= this.movementSpeedX;
+                this.x -= this.speedX;
             }
             moveRight() {
-                this.x += this.movementSpeedX;
+                this.x += this.speedX;
             }
             update() {
-/*                 if(((this.x + this.width) > player.x) &&
-                    (this.x < (player.x + player.width)) &&
-                    ((this.y + this.height) > player.y) &&
-                    (this.y < (player.y + player.height))) {
+/*                 if(((this.x + this.width) > player.x) && (this.x < (player.x + player.width)) &&  //x-axis
+                    ((this.y + this.height) > player.y) && (this.y < (player.y + player.height))) {  //y-axis
                     console.log('Hit');
                 } */
             }
