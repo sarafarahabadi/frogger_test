@@ -10,8 +10,9 @@
             margin-top: 0;
             text-align: center;
         }
-        .canvas {
-            padding-top: 60px;
+        .STL {
+            font-size: 15px;
+            text-align: center;
         }
     </style>
 </head>
@@ -59,8 +60,13 @@
         const log3Image = new Image();
         log3Image.src = "images/log3.png";
 
+        //global variables
+        let score = 0;
+        let lives = 5; 
+        let floating = false;
+        
+
 // class: car, turtle, log, player
-        let countLives = 5;
         class car {
             constructor(startX, startY, width, height, speedX, image){
                 this.x = startX;
@@ -84,16 +90,10 @@
                     (this.x < (player.x + player.width)) &&
                     ((this.y + this.height) > player.y) &&
                     (this.y < (player.y + player.height))) {
-                    if(countLives >  0) {
                         player.x = 310;
-                        player.y = 700; 
-                        countLives -= 1;  
-// can put a button counter to reduce lives after death!
-                        console.log("You have " + countLives + " remaining!");            
-                    } else {
-                        alert('No more lives! Thanks for playing!')
-                        countLives = 5;
-                    }
+                        player.y = 700;     
+                        lives--;
+                        console.log(lives)                                                
                 }
             }
             draw() {
@@ -101,7 +101,7 @@
             }
         } 
 
-        class turtle {
+        class Turtle {
             constructor(startX, startY, width, height, speedX, image){
                 this.x = startX;
                 this.y = startY;
@@ -116,13 +116,13 @@
                 } 
                 this.x = this.x + this.speedX;
             }
-            standOnTurtles() {
+            standOnTurtle() {
                 if(((this.x + this.width) > player.x) &&
-                    (this.x < (player.x + player.width)) &&
-                    ((this.y + this.height) > player.y) &&
-                    (this.y < (player.y + player.height))) {
-                        console.log("you are on the turtles!");
-                        player.x = this.x + this.speedX;
+                (this.x < (player.x + player.width)) &&
+                ((this.y + this.height) > player.y) &&
+                (this.y < (player.y + player.height))) {
+                    player.x = this.x + this.speedX;
+                    floating = true;
                 } 
             }
             draw() {
@@ -130,7 +130,7 @@
             }
         } 
 
-        class log {
+        class Log {
             constructor(startX, startY, width, height, speedX, image){
                 this.x = startX;
                 this.y = startY;
@@ -150,8 +150,8 @@
                     (this.x < (player.x + player.width)) &&
                     ((this.y + this.height) > player.y) &&
                     (this.y < (player.y + player.height))) {
-                        console.log("you are on the logs!");
                         player.x = this.x + this.speedX;
+                        floating = true;
                 } 
             }
             draw() {
@@ -170,20 +170,39 @@
             }
             moveUp() {
                 this.y -= this.speedY;
+                floating = false;
             }
             moveDown() {
                 this.y += this.speedY;
+                floating = false;
             }
             moveLeft() {
                 this.x -= this.speedX;
+                floating = false;
             }
             moveRight() {
                 this.x += this.speedX;
+                floating = false;
             }
+
+//death on water => incomplete
             update() {
-            }
+                if(((this.y < 310) && (this.y > 50)) && 
+                    (!floating)) { 
+                        player.x = 310;
+                        player.y = 700;                        
+                        lives--;
+                        console.log(lives)
+                    }     
+            }  
             draw() {
                 context.drawImage(frogStandImage, this.x, this.y);
+            }
+            countLives() {
+                let lives = 5; 
+                if(lives > 0) {
+                    lives--;
+                } 
             }
         }
 
@@ -216,30 +235,30 @@
         //turtle
         const turtleStorage = [];
         for(let i = 0; i < 3; i++) {
-            turtleStorage.push(new turtle(450+ i*50 , 310, 48, 36, -1, turtleImage));
-            turtleStorage.push(new turtle(100+ i*50 , 310, 48, 36, -1, turtleImage));
+            turtleStorage.push(new Turtle(450+ i*50 , 310, 48, 36, -1, turtleImage));
+            turtleStorage.push(new Turtle(100+ i*50 , 310, 48, 36, -1, turtleImage));
         }
         for(let i = 0; i < 2; i++) {
-            turtleStorage.push(new turtle(550+ i*50 , 145, 48, 36, -1, turtleImage));
-            turtleStorage.push(new turtle(80+ i*50 , 145, 48, 36, -1, turtleImage));
-            turtleStorage.push(new turtle(300+ i*50 , 145, 48, 36, -1, turtleImage));
+            turtleStorage.push(new Turtle(550+ i*50 , 145, 48, 36, -1, turtleImage));
+            turtleStorage.push(new Turtle(80+ i*50 , 145, 48, 36, -1, turtleImage));
+            turtleStorage.push(new Turtle(300+ i*50 , 145, 48, 36, -1, turtleImage));
         }
 
         //log
         const logStorage = [];
         for(let i = 0; i < 2; i++) {
-            logStorage.push(new log(152+ i*300 , 255, 48, 33, 0.8, log1Image));
-            logStorage.push(new log(200+ i*300 , 255, 48, 36, 0.8, log3Image));
+            logStorage.push(new Log(152+ i*300 , 255, 48, 33, 0.8, log1Image));
+            logStorage.push(new Log(200+ i*300 , 255, 48, 36, 0.8, log3Image));
         }
         for(let i = 0; i < 3; i++) {
-            logStorage.push(new log(52+ i*250 , 200, 48, 33, 1, log1Image));
-            logStorage.push(new log(100+ i*250 , 200, 48, 33, 1, log2Image));
-            logStorage.push(new log(148+ i*250 , 200, 48, 36, 1, log3Image)); 
+            logStorage.push(new Log(52+ i*250 , 200, 48, 33, 1, log1Image));
+            logStorage.push(new Log(100+ i*250 , 200, 48, 33, 1, log2Image));
+            logStorage.push(new Log(148+ i*250 , 200, 48, 36, 1, log3Image)); 
         }
         for(let i = 0; i < 3; i++) {
-            logStorage.push(new log(100+ i*250 , 90, 48, 33, 1, log1Image));
-            logStorage.push(new log(148+ i*250 , 90, 48, 33, 1, log2Image));
-            logStorage.push(new log(196+ i*250 , 90, 48, 36, 1, log3Image)); 
+            logStorage.push(new Log(100+ i*250 , 90, 48, 33, 1, log1Image));
+            logStorage.push(new Log(148+ i*250 , 90, 48, 33, 1, log2Image));
+            logStorage.push(new Log(196+ i*250 , 90, 48, 36, 1, log3Image)); 
         }
           
 //updateScreen: car, turtle, log, player
@@ -256,7 +275,7 @@
             for(let i = 0; i < turtleStorage.length; i++) {
                 turtleStorage[i].update();
                 turtleStorage[i].draw();
-                turtleStorage[i].standOnTurtles();
+                turtleStorage[i].standOnTurtle();
             }
             for(let i = 0; i < logStorage.length; i++) {
                 logStorage[i].update();
@@ -266,6 +285,7 @@
 
             player.update();
             player.draw();
+            player.countLives();
 
             window.requestAnimationFrame(updateScreen);
         }
@@ -289,7 +309,13 @@
                     break;
             }
         });
+    </script>
+    <script>
 
     </script>
+
+
+
+
 </body>
 </html>
