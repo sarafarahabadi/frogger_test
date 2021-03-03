@@ -10,10 +10,6 @@
             margin-top: 0;
             text-align: center;
         }
-        .STL {
-            font-size: 15px;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -23,7 +19,11 @@
         const context = canvas.getContext("2d");
 
         canvas.width = 672;
-        canvas.height = 744;
+        canvas.height = 850;
+        context.font = "30px Comic Sans MS";
+        context.fillStyle = "red";
+        context.textAlign = "center";
+
 
         // background image
         const backgroundImage = new Image();
@@ -63,9 +63,8 @@
         //global variables
         let score = 0;
         let lives = 5; 
-        let floating = false;
+        let result = false;
         
-
 // class: car, turtle, log, player
         class car {
             constructor(startX, startY, width, height, speedX, image){
@@ -122,7 +121,7 @@
                 ((this.y + this.height) > player.y) &&
                 (this.y < (player.y + player.height))) {
                     player.x = this.x + this.speedX;
-                    floating = true;
+                    result = true;
                 } 
             }
             draw() {
@@ -151,7 +150,7 @@
                     ((this.y + this.height) > player.y) &&
                     (this.y < (player.y + player.height))) {
                         player.x = this.x + this.speedX;
-                        floating = true;
+                        result = true;
                 } 
             }
             draw() {
@@ -170,25 +169,25 @@
             }
             moveUp() {
                 this.y -= this.speedY;
-                floating = false;
+                result = false;
             }
             moveDown() {
                 this.y += this.speedY;
-                floating = false;
+                result = false;
             }
             moveLeft() {
                 this.x -= this.speedX;
-                floating = false;
+                result = false;
             }
             moveRight() {
                 this.x += this.speedX;
-                floating = false;
+                result = false;
             }
 
 //death on water => incomplete
             update() {
                 if(((this.y < 310) && (this.y > 50)) && 
-                    (!floating)) { 
+                    (!result)) { 
                         player.x = 310;
                         player.y = 700;                        
                         lives--;
@@ -198,11 +197,13 @@
             draw() {
                 context.drawImage(frogStandImage, this.x, this.y);
             }
-            countLives() {
-                let lives = 5; 
-                if(lives > 0) {
-                    lives--;
-                } 
+            countLives(){
+                if(lives == 0) {
+                    let r = confirm("GAME OVER! click 'ok' and then 'cancel' to try again :)");
+                    if (r == true){
+                    window.location.reload();               
+                    }
+                }
             }
         }
 
@@ -265,7 +266,10 @@
       function updateScreen() {
             //clear the canvas
             context.clearRect(0, 0, canvas.width, canvas.height);
-            context.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+            context.drawImage(backgroundImage, 0, 0, canvas.width, 744);
+            context.fillText("Lives: " + lives, 100, 790);
+            context.fillText("Score: ", 100, 825);
+
 
             for(let i = 0; i < carStorage.length; i++) {
                 carStorage[i].update();
