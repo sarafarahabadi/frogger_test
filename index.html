@@ -99,8 +99,7 @@
                         player.x = 310;
                         player.y = 700;     
                         lives--;
-                        console.log(lives) 
-                        score = 0;                                               
+                        score = score - 10;                                               
                 }
             }
             draw() {
@@ -179,11 +178,10 @@
                     (this.x < (player.x + player.width)) &&
                     ((this.y + this.height) > player.y) &&
                     (this.y < (player.y + player.height))) {
-                        console.log("winner")
                         spot = true;
                         player.x = 310;
                         player.y = 700; 
-                        score += 20;
+                        score += 100;
                 }
             }
             draw() {
@@ -206,6 +204,7 @@
             moveUp() {
                 this.y -= this.speedY;
                 result = false;
+                score += 10;
             }
             moveDown() {
                 this.y += this.speedY;
@@ -225,8 +224,7 @@
                         player.x = 310;
                         player.y = 700;                        
                         lives--;
-                        console.log(lives)
-                        score = 0;
+                        score = score - 10; 
                     }     
             }  
             draw() {
