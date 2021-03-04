@@ -60,10 +60,17 @@
         const log3Image = new Image();
         log3Image.src = "images/log3.png";
 
+        const blueImage = new Image();
+        blueImage.src = "images/blue_spot.png";
+
+        const frogEndImage = new Image();
+        frogEndImage.src = "images/frog_end.png";
+
         //global variables
         let score = 0;
         let lives = 5; 
         let result = false;
+        let spot = false;
         
 // class: car, turtle, log, player
         class car {
@@ -92,7 +99,8 @@
                         player.x = 310;
                         player.y = 700;     
                         lives--;
-                        console.log(lives)                                                
+                        console.log(lives) 
+                        score = 0;                                               
                 }
             }
             draw() {
@@ -158,6 +166,34 @@
             }
         } 
 
+        class Bluespot {
+            constructor(startX, startY, width, height, image) {
+                this.x = startX;
+                this.y = startY;
+                this.width = width;
+                this.height = height;
+                this.image = image;
+            }
+            update() {
+                if(((this.x + this.width) > player.x) &&
+                    (this.x < (player.x + player.width)) &&
+                    ((this.y + this.height) > player.y) &&
+                    (this.y < (player.y + player.height))) {
+                        console.log("winner")
+                        spot = true;
+                        player.x = 310;
+                        player.y = 700; 
+                        score += 20;
+                }
+            }
+            draw() {
+                context.drawImage(blueImage, this.x, this.y);
+                if(spot) {
+                    this.image.src = "images/frog_end.png";
+                }
+            }
+        }
+
         class Player {
             constructor(startX, startY, width, height, speedX, speedY) {
                 this.x = startX;
@@ -183,15 +219,14 @@
                 this.x += this.speedX;
                 result = false;
             }
-
-//death on water => incomplete
-            update() {
+            deathInWater() {
                 if(((this.y < 310) && (this.y > 50)) && 
                     (!result)) { 
                         player.x = 310;
                         player.y = 700;                        
                         lives--;
                         console.log(lives)
+                        score = 0;
                     }     
             }  
             draw() {
@@ -261,6 +296,17 @@
             logStorage.push(new Log(148+ i*250 , 90, 48, 33, 1, log2Image));
             logStorage.push(new Log(196+ i*250 , 90, 48, 36, 1, log3Image)); 
         }
+
+        //bluespots
+        const blueSpotStorage = [];
+        for(let i = 0; i < 1; i++) {
+            blueSpotStorage.push(new Bluespot(40, 20, 53, 45, blueImage));
+            blueSpotStorage.push(new Bluespot(175, 20, 53, 45, blueImage));
+            blueSpotStorage.push(new Bluespot(310, 20, 53, 45, blueImage));
+            blueSpotStorage.push(new Bluespot(445, 20, 53, 45, blueImage));
+            blueSpotStorage.push(new Bluespot(580, 20, 53, 45, blueImage));
+        }
+
           
 //updateScreen: car, turtle, log, player
       function updateScreen() {
@@ -268,7 +314,7 @@
             context.clearRect(0, 0, canvas.width, canvas.height);
             context.drawImage(backgroundImage, 0, 0, canvas.width, 744);
             context.fillText("Lives: " + lives, 100, 790);
-            context.fillText("Score: ", 100, 825);
+            context.fillText("Score: " + score, 100, 825);
 
 
             for(let i = 0; i < carStorage.length; i++) {
@@ -286,8 +332,12 @@
                 logStorage[i].draw();
                 logStorage[i].standOnLog();
             }
+            for(let i = 0; i < blueSpotStorage.length; i++) {
+                blueSpotStorage[i].update();
+                blueSpotStorage[i].draw();
+            }
 
-            player.update();
+            player.deathInWater();
             player.draw();
             player.countLives();
 
