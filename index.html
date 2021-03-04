@@ -98,8 +98,8 @@
                     (this.y < (player.y + player.height))) {
                         player.x = 310;
                         player.y = 700;     
-                        lives--;
-                        score = score - 10;                                               
+                        lives--;        
+                        score -= 30;                                      
                 }
             }
             draw() {
@@ -178,17 +178,14 @@
                     (this.x < (player.x + player.width)) &&
                     ((this.y + this.height) > player.y) &&
                     (this.y < (player.y + player.height))) {
-                        spot = true;
                         player.x = 310;
                         player.y = 700; 
-                        score += 100;
+                        score += 500;
+                        this.image = frogEndImage;
                 }
             }
             draw() {
-                context.drawImage(blueImage, this.x, this.y);
-                if(spot) {
-                    this.image.src = "images/frog_end.png";
-                }
+                context.drawImage(this.image, this.x, this.y);
             }
         }
 
@@ -204,7 +201,7 @@
             moveUp() {
                 this.y -= this.speedY;
                 result = false;
-                score += 10;
+                score += 5;
             }
             moveDown() {
                 this.y += this.speedY;
@@ -224,7 +221,7 @@
                         player.x = 310;
                         player.y = 700;                        
                         lives--;
-                        score = score - 10; 
+                        score -= 30;
                     }     
             }  
             draw() {
@@ -313,7 +310,9 @@
             context.drawImage(backgroundImage, 0, 0, canvas.width, 744);
             context.fillText("Lives: " + lives, 100, 790);
             context.fillText("Score: " + score, 100, 825);
-
+            if(score <= 0) {
+                score = 0;
+            }
 
             for(let i = 0; i < carStorage.length; i++) {
                 carStorage[i].update();
